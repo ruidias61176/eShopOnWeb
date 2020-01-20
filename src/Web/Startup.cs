@@ -30,9 +30,13 @@ namespace Microsoft.eShopWeb.Web
     public class Startup
     {
         private IServiceCollection _services;
-        public Startup(IConfiguration configuration)
+
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -41,9 +45,6 @@ namespace Microsoft.eShopWeb.Web
         {
             // use in-memory database
             ConfigureInMemoryDatabases(services);
-
-            // use real database
-            //ConfigureProductionServices(services);
         }
 
         private void ConfigureInMemoryDatabases(IServiceCollection services)
@@ -78,7 +79,10 @@ namespace Microsoft.eShopWeb.Web
         {
             ConfigureInMemoryDatabases(services);
         }
-
+        public void ConfigureAzureServices(IServiceCollection services)
+        {
+            ConfigureProductionServices(services);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -117,7 +121,7 @@ namespace Microsoft.eShopWeb.Web
                 options.Conventions.Add(new RouteTokenTransformerConvention(
                          new SlugifyParameterTransformer()));
 
-            });    
+            });
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/Basket/Checkout");
@@ -125,8 +129,8 @@ namespace Microsoft.eShopWeb.Web
             services.AddControllersWithViews();
 
             services.AddHttpContextAccessor();
-            
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1"}));
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" }));
 
             services.AddHealthChecks();
 
@@ -147,7 +151,7 @@ namespace Microsoft.eShopWeb.Web
             {
                 var existingUserManager = scope.ServiceProvider
                     .GetService<UserManager<ApplicationUser>>();
-                if(existingUserManager == null)
+                if (existingUserManager == null)
                 {
                     services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddDefaultUI()
@@ -215,7 +219,7 @@ namespace Microsoft.eShopWeb.Web
 
             app.UseStaticFiles();
             app.UseRouting();
-            
+
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseAuthentication();

@@ -39,6 +39,8 @@
 
     @if (Model.CatalogModel.CatalogItems.Any())
     {
+        @* Func<dynamic, object> listItemTemplate = @<partial name = "_product" for="@item"); *@
+        @* Func<dynamic, object> listItemTemplate = item=> Html.Partial("_product", item); *@
         @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo);
          
          var gridViewModel = new GridViewModel {

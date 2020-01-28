@@ -5,7 +5,7 @@ namespace Microsoft.eShopWeb.Web.ViewModels
 {
     public class GridViewModel
     {
-        public IEnumerable<CatalogItemViewModel> Items {get; set;}
-        public int NumColumns {get; set;}
+        public IEnumerable<CatalogItemViewModel> Items { get; set; }
+        public int NumColumns { get; set; }
     }
 }

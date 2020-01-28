@@ -4,6 +4,8 @@
 <ul class="list-group list-group-flush">
   @foreach (var catalogItem in Model.Items)
       {
-  <li class="list-group-item"><span>@catalogItem.Name</span> &nbsp @catalogItem.Price @catalogItem.PriceUnit</li>}
+  <li class="list-group-item">
+    @*<span>@catalogItem.Name</span> &nbsp @catalogItem.Price @catalogItem.PriceUnit*@catalogItem
+    </li>}
  </ul>
 </div>

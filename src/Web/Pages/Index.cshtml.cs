@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.eShopWeb.Web.Pages
 {
+    
     public class IndexModel : PageModel
     {
         private readonly ICatalogViewModelService _catalogViewModelService;
@@ -16,9 +17,11 @@ namespace Microsoft.eShopWeb.Web.Pages
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();
 
-        public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
+ 
+        public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId/*, ResultsView view = ResultsView.Grid*/)
         {
-            CatalogModel = await _catalogViewModelService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied);
+            CatalogModel = await _catalogViewModelService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, catalogModel.BrandFilterApplied, catalogModel.TypesFilterApplied, HttpContext.RequestAborted);
+            CatalogModel.ResultView = catalogModel.ResultView; // view
         }
     }
 }

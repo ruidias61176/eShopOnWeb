@@ -17,13 +17,14 @@ namespace Microsoft.eShopWeb.Web.Pages.Admin
         {
             _catalogItemViewModelService = catalogItemViewModelService;
         }
-
-        [BindProperty]
+        
+       [BindProperty]
         public CatalogItemViewModel CatalogModel { get; set; } = new CatalogItemViewModel();
 
-        public async Task OnGet(CatalogItemViewModel catalogModel)
+        public Task OnGet(CatalogItemViewModel catalogModel)
         {
             CatalogModel = catalogModel;
+            return Task.CompletedTask;
         }
 
         public async Task<IActionResult> OnPostAsync()

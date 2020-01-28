@@ -22,19 +22,41 @@
     </div>
 </section>
 <div class="container">
+
+
+    
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+  <label class="btn btn-secondary active">
+    <input type="radio" name="options" id="Grid" checked> Grid
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="Table"> Table
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="List"> List
+  </label>
+</div>
+
     @if (Model.CatalogModel.CatalogItems.Any())
     {
-        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
+        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo);
+         
+         var gridViewModel = new GridViewModel {
+            Items = Model.CatalogModel.CatalogItems,
+            NumColumns = 2
+        };
+        @Html.Partial("_gridView", gridViewModel);
 
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
-            {
-                <div class="esh-catalog-item col-md-4">
-                    <partial name="_product" for="@catalogItem" />
-                </div>
-            }
-        </div>
-        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
+        var tableViewModel = new TableViewModel {
+            Items = Model.CatalogModel.CatalogItems,
+        };
+        @Html.Partial("_tableView", tableViewModel);
+
+        var listViewModel = new ListViewModel {
+            Items = Model.CatalogModel.CatalogItems,
+        };
+        @Html.Partial("_listView", listViewModel);
+        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo);
     }
     else
     {

@@ -1,0 +1,43 @@
+@model TableViewModel
+
+<div>
+
+<table id="selectedColumn" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th class="th-sm">Name
+      </th>
+      <th class="th-sm">Price
+      </th>
+      <th class="th-sm">PriceUnit
+      </th>
+      <th class="th-sm">Id
+      </th>
+     </tr>
+  </thead>
+  <tbody>
+    
+      @foreach (var catalogItem in Model.Items)
+      {
+        <tr>
+          <td> @catalogItem.Name</td>
+      <td>@catalogItem.Price</td>
+      <td>@catalogItem.PriceUnit</td>
+      <td>@catalogItem.Id</td>
+      </tr>}
+    
+</tbody>
+  <tfoot>
+    <tr>
+      <th>Name
+      </th>
+      <th>Price
+      </th>
+      <th>PriceUnit
+      </th>
+      <th>Id
+      </th>
+      </tr>
+  </tfoot>
+</table>
+</div>

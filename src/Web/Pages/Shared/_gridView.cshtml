@@ -1,0 +1,14 @@
+@model GridViewModel
+
+@{
+    var col = 12 / Model.NumColumns;
+    var className = $"esh-catalog-item col-md-{col}";
+}
+<div class="esh-catalog-items row">
+    @foreach (var catalogItem in Model.Items)
+    {
+        <div class="@className">
+            <partial name="_product" for="@catalogItem" />
+        </div>
+    }
+</div>

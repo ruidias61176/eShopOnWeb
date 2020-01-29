@@ -3,7 +3,7 @@
 
 namespace Microsoft.eShopWeb.Web.ViewModels
 {
-    public enum ResultsView {
+    public enum ResultView {
         Grid,
         Table,
         List

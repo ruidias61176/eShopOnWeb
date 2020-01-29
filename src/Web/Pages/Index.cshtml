@@ -11,11 +11,19 @@
 <section class="esh-catalog-filters">
     <div class="container">
         <form method="get">
+            <label class="esh-catalog-label" data-title="View Type">
+                <select asp-for="@Model.CatalogModel.ResultView"
+                asp-items="@Model.CatalogModel.ResultViews" class="esh-catalog-filter">
+                </select>
+            </label>
             <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogModel.BrandFilterApplied"
+                asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
             </label>
             <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogModel.TypesFilterApplied"
+                asp-items="@Model.CatalogModel.Types"
+                class="esh-catalog-filter"></select>
             </label>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
         </form>
@@ -39,11 +47,12 @@
 
     @if (Model.CatalogModel.CatalogItems.Any())
     {
-        @* Func<dynamic, object> listItemTemplate = @<partial name = "_product" for="@item"); *@
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
+        @* Func<dynamic, object> listItemTemplate = @<partial name = "_product" for="@item" />; *@
         @* Func<dynamic, object> listItemTemplate = item=> Html.Partial("_product", item); *@
-        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo);
+        @* @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo); *@
          
-         var gridViewModel = new GridViewModel {
+        @*  var gridViewModel = new GridViewModel {
             Items = Model.CatalogModel.CatalogItems,
             NumColumns = 2
         };
@@ -58,7 +67,25 @@
             Items = Model.CatalogModel.CatalogItems,
         };
         @Html.Partial("_listView", listViewModel);
-        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo);
+        @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo); *@
+        switch (Model.CatalogModel.ResultView) {
+            case ResultView.Grid:    
+                <partial name="ResultViews/_gridView" for="@Model.CatalogModel.CatalogItems" />        
+                break;
+            case ResultView.List: {
+                Func<dynamic, object> listItemTemplate = @<partial name="_product" for="@item" />;
+                var listViewModel = new ListViewModel {
+                    Items = Model.CatalogModel.CatalogItems,
+                    ItemTemplate = listItemTemplate
+                };
+                <partial name="ResultViews/_listView" for="@listViewModel" />
+                break;
+            }
+            case ResultView.Table:
+                <partial name="ResultViews/_tableView" for="CatalogModel.CatalogItems" />
+                break;
+        }
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
     }
     else
     {

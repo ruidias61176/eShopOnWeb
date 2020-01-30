@@ -25,6 +25,10 @@
                 asp-items="@Model.CatalogModel.Types"
                 class="esh-catalog-filter"></select>
             </label>
+            <label class="md-form mt-0" data-title="searchText">
+                <input asp-for="@Model.CatalogModel.SearchText"
+                asp-items="@Model.CatalogModel.SearchText" class="form-control" type="text" placeholder="Search" aria-label="Search">           
+            </label>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
         </form>
     </div>
@@ -69,22 +73,28 @@
         @Html.Partial("_listView", listViewModel);
         @Html.Partial("_pagination", Model.CatalogModel.PaginationInfo); *@
         switch (Model.CatalogModel.ResultView) {
-            case ResultView.Grid:    
-                <partial name="ResultViews/_gridView" for="@Model.CatalogModel.CatalogItems" />        
-                break;
-            case ResultView.List: {
-                Func<dynamic, object> listItemTemplate = @<partial name="_product" for="@item" />;
-                var listViewModel = new ListViewModel {
-                    Items = Model.CatalogModel.CatalogItems,
-                    ItemTemplate = listItemTemplate
+            case ResultView.Grid:  {
+                var gridViewModel = new GridViewModel {
+                    Items = Model.CatalogModel.CatalogItems
                 };
-                <partial name="ResultViews/_listView" for="@listViewModel" />
+                <partial name="_gridView" for="@gridViewModel" />        
                 break;
             }
-            case ResultView.Table:
-                <partial name="ResultViews/_tableView" for="CatalogModel.CatalogItems" />
+            case ResultView.List: {
+                @* Func<dynamic, object> listItemTemplate = @<partial name="_product" for="@item" />; *@
+                var listViewModel = new ListViewModel {
+                    Items = Model.CatalogModel.CatalogItems
+                    @*, ItemTemplate = listItemTemplate *@
+                };
+                <partial name="_listView" for="@listViewModel" />
                 break;
-        }
+            }
+            case ResultView.Table:{
+            var tableViewModel = new TableViewModel {
+                Items = Model.CatalogModel.CatalogItems};
+                <partial name="_tableView" for="@tableViewModel" />
+                break;
+        }}
         @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
     }
     else

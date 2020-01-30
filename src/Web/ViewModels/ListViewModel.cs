@@ -5,7 +5,7 @@ namespace Microsoft.eShopWeb.Web.ViewModels
 {
     public class ListViewModel
     {
-        public IEnumerable<dynamic> Items { get; set; }
+        public IEnumerable<CatalogItemViewModel> Items { get; set; }
         public Func<dynamic, object> ItemTemplate {get; set;}
         public string ListClass {get; set;} = null;
         public string ListItemClass {get; set;} = null;

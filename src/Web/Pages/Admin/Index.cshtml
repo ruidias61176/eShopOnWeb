@@ -11,30 +11,69 @@
 <section class="esh-catalog-filters">
     <div class="container">
         <form method="get">
+            <label class="esh-catalog-label" data-title="View Type">
+                <select asp-for="@Model.CatalogModel.ResultView"
+                asp-items="@Model.CatalogModel.ResultViews" class="esh-catalog-filter">
+                </select>
+            </label>
             <label class="esh-catalog-label" data-title="brand">
-                <select asp-for="@Model.CatalogModel.BrandFilterApplied" asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogModel.BrandFilterApplied"
+                asp-items="@Model.CatalogModel.Brands" class="esh-catalog-filter"></select>
             </label>
             <label class="esh-catalog-label" data-title="type">
-                <select asp-for="@Model.CatalogModel.TypesFilterApplied" asp-items="@Model.CatalogModel.Types" class="esh-catalog-filter"></select>
+                <select asp-for="@Model.CatalogModel.TypesFilterApplied"
+                asp-items="@Model.CatalogModel.Types"
+                class="esh-catalog-filter"></select>
+            </label>
+            <label class="md-form mt-0" data-title="searchText">
+                <input asp-for="@Model.CatalogModel.SearchText"
+                asp-items="@Model.CatalogModel.SearchText" class="form-control" type="text" placeholder="Search" aria-label="Search">           
             </label>
             <input class="esh-catalog-send" type="image" src="images/arrow-right.svg" />
         </form>
     </div>
 </section>
 <div class="container">
+
+
+    
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+  <label class="btn btn-secondary active">
+    <input type="radio" name="options" id="Grid" checked> Grid
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="Table"> Table
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="List"> List
+  </label>
+</div>
+
     @if (Model.CatalogModel.CatalogItems.Any())
     {
-        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
-
-        <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
-            {
-                <div class="esh-catalog-item col-md-4">
-                    <partial name="_editCatalog" for="@catalogItem" />
-                </div>
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
+        switch (Model.CatalogModel.ResultView) {
+            case ResultView.Grid:  {
+                var gridViewModel = new GridViewModel {
+                    Items = Model.CatalogModel.CatalogItems
+                };
+                <partial name="_gridView" for="@gridViewModel" />        
+                break;
             }
-        </div>
-        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
+            case ResultView.List: {
+                Func<dynamic, object> listItemTemplate = @<partial name="_product" for="@item" />;
+                var listViewModel = new ListViewModel {
+                    Items = Model.CatalogModel.CatalogItems,
+                    ItemTemplate = listItemTemplate
+                };
+                <partial name="_listView" for="@listViewModel" />
+                break;
+            }
+            case ResultView.Table:
+                <partial name="_tableView" for="CatalogModel.CatalogItems" />
+                break;
+        }
+        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
     }
     else
     {

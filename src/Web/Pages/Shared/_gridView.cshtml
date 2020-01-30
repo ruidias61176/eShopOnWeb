@@ -1,7 +1,7 @@
 @model GridViewModel
 
 @{
-    var col = 12 / Model.NumColumns;
+    var col = 12 / (Model.NumColumns == 0 ? 3 : Model.NumColumns) ;
     var className = $"esh-catalog-item col-md-{col}";
 }
 <div class="esh-catalog-items row">

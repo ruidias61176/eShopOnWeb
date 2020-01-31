@@ -10,7 +10,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
             : base(i =>
                 (!brandId.HasValue || i.CatalogBrandId == brandId) &&
                 (!typeId.HasValue || i.CatalogTypeId == typeId) &&
-                (string.IsNullOrEmpty(searchText) || i.Name.Contains(searchText)))
+                (string.IsNullOrEmpty(searchText) || i.Name.Contains(searchText, System.StringComparison.OrdinalIgnoreCase)))
 
         {
             ApplyPaging(skip, take);

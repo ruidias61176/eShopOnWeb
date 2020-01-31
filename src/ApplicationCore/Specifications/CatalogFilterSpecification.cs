@@ -9,7 +9,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
             : base(catalogItem =>
                 (!brandId.HasValue || catalogItem.CatalogBrandId == brandId) &&
                 (!typeId.HasValue || catalogItem.CatalogTypeId == typeId) &&
-                (string.IsNullOrEmpty(searchText) || catalogItem.Name.Contains(searchText)))
+                (string.IsNullOrEmpty(searchText) || catalogItem.Name.Contains(searchText, System.StringComparison.OrdinalIgnoreCase)))
         {
         }
     }

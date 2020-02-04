@@ -2,6 +2,9 @@
 
 namespace Microsoft.eShopWeb.Web.Extensions
 {
+        public class InvalidPageIndexException: Exception {
+
+    }
     public static class CacheHelpers
     {
         public static readonly TimeSpan DefaultCacheDuration = TimeSpan.FromSeconds(30);
@@ -10,6 +13,9 @@ namespace Microsoft.eShopWeb.Web.Extensions
         public static string GenerateCatalogItemCacheKey(int pageIndex, int itemsPage,
             string searchText, int? brandId, int? typeId)
         {
+            if (pageIndex < 0) {
+                throw new InvalidPageIndexException();
+            }
             return string.Format(
                 _itemsKeyTemplate, pageIndex, itemsPage, brandId, typeId,
                 searchText ?? string.Empty // TODO: Handle invalid special chars in cache keys?

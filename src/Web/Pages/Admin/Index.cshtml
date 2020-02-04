@@ -33,46 +33,19 @@
     </div>
 </section>
 <div class="container">
-
-
-    
-<div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-secondary active">
-    <input type="radio" name="options" id="Grid" checked> Grid
-  </label>
-  <label class="btn btn-secondary">
-    <input type="radio" name="options" id="Table"> Table
-  </label>
-  <label class="btn btn-secondary">
-    <input type="radio" name="options" id="List"> List
-  </label>
-</div>
-
     @if (Model.CatalogModel.CatalogItems.Any())
     {
-        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
-        switch (Model.CatalogModel.ResultView) {
-            case ResultView.Grid:  {
-                var gridViewModel = new GridViewModel {
-                    Items = Model.CatalogModel.CatalogItems
-                };
-                <partial name="_gridView" for="@gridViewModel" />        
-                break;
+        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
+
+        <div class="esh-catalog-items row">
+            @foreach (var catalogItem in Model.CatalogModel.CatalogItems)
+            {
+                <div class="esh-catalog-item col-md-4">
+                    <partial name="_editCatalog" for="@catalogItem" />
+                </div>
             }
-            case ResultView.List: {
-                Func<dynamic, object> listItemTemplate = @<partial name="_product" for="@item" />;
-                var listViewModel = new ListViewModel {
-                    Items = Model.CatalogModel.CatalogItems,
-                    ItemTemplate = listItemTemplate
-                };
-                <partial name="_listView" for="@listViewModel" />
-                break;
-            }
-            case ResultView.Table:
-                <partial name="_tableView" for="CatalogModel.CatalogItems" />
-                break;
-        }
-        @await Html.PartialAsync("_pagination", Model.CatalogModel.PaginationInfo);
+        </div>
+        <partial name="_pagination" for="CatalogModel.PaginationInfo" />
     }
     else
     {

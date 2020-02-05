@@ -46,9 +46,19 @@ namespace Microsoft.eShopWeb.Web
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .ConfigureLogging(logging =>{
-                    logging.ClearProviders();
-                    logging.AddConsole();
+                .ConfigureLogging(builder =>{
+                    // Adding the filter below to ensure logs of all severity from Program.cs
+                    // is sent to ApplicationInsights.
+                    builder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                    (typeof(Program).FullName, LogLevel.Trace);
+
+                    // Adding the filter below to ensure logs of all severity from Startup.cs
+                    // is sent to ApplicationInsights.
+                    builder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                    (typeof(Startup).FullName, LogLevel.Trace);
+
+                    builder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                    (string.Empty, LogLevel.Trace);
                 });
     }
 }

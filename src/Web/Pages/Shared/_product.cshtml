@@ -1,8 +1,9 @@
 ﻿@model CatalogItemViewModel
 
-<form asp-page="/Basket/Index" method="post">
+<form method="post">
     <img class="esh-catalog-thumbnail" src="@Model.PictureUri" />
-    <input class="esh-catalog-button" type="submit" value="[ ADD TO BASKET ]" />
+    <input class="esh-catalog-button" asp-page="/Basket/Index" type="submit" value="[ ADD TO BASKET ]" />
+    <input class="esh-catalog-button" asp-page="/Wishlist/Index" type="submit" value="[ ADD TO WISHLIST ]" />
     <div class="esh-catalog-name">
         <span>@Model.Name</span>
     </div>
@@ -17,3 +18,4 @@
     <input type="hidden" asp-for="@Model.PictureUri" name="pictureUri" />
     <input type="hidden" asp-for="@Model.Price" name="price" />
 </form>
+

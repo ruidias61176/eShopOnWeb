@@ -260,3 +260,4 @@ pub/
 \.vscode/
 
 appsettings.Azure.json
+src/Web/appsettings.json

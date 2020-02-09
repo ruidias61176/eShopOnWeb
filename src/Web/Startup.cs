@@ -36,6 +36,7 @@ using Newtonsoft.Json;
 using Web.Extensions;
 using Web.Extensions.Middleware;
 using Microsoft.eShopWeb.Web.Extensions;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Microsoft.eShopWeb.Web
@@ -156,7 +157,7 @@ namespace Microsoft.eShopWeb.Web
             {
                 services.AddSingleton<ICurrencyService, CurrencyServiceExternal>();
             }
-
+            services.AddMediatR(typeof(WishlistViewModelService).Assembly);
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddCatalogServices(Configuration);
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
@@ -198,7 +199,10 @@ namespace Microsoft.eShopWeb.Web
             });
 
             // The following line enables Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(config =>{
+                TelemetryDebugWriter.IsTracingDisabled = true;
+            });
+            
 
             _services = services; // used to debug registered services
         }

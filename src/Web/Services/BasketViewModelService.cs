@@ -16,7 +16,8 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IUriComposer _uriComposer;
         private readonly IAsyncRepository<CatalogItem> _itemRepository;
 
-        public BasketViewModelService(IAsyncRepository<Basket> basketRepository,
+        public BasketViewModelService(
+            IAsyncRepository<Basket> basketRepository,
             IAsyncRepository<CatalogItem> itemRepository,
             IUriComposer uriComposer)
         {

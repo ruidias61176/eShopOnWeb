@@ -45,25 +45,25 @@ namespace Microsoft.eShopWeb.Web.Pages.Wishlist
             var wishlist = await _wishlistViewModelService.GetOrCreateWishlistForUser(User.Identity.Name);
             if (wishlist == null)
             {
-
+                    //TODO
                 return RedirectToPage("/Index");
             }
             var wishListItem = wishlist.Items.Where(x => x.Id == wishListItemId).FirstOrDefault();
             if (wishListItem == null)
             {
-
+                    //TODO
                 return RedirectToPage("/Index");
             }
 
             var basket = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
             if (basket == null)
             {
-
+                    //TODO
                 return RedirectToPage("/Index");
             }
             var catalogItem = await _catalogItemRepository.GetByIdAsync(wishListItem.CatalogItemId);
             await _basketService.AddItemToBasket(basket.Id, wishListItem.CatalogItemId, catalogItem.Price);
-
+                //TODO
             return RedirectToPage("/Basket/Index");
         }
 

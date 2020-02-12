@@ -23,6 +23,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<WishlistItem> WishlistItems { get; set; }
+        public DbSet<CatalogStore> CatalogStores {get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

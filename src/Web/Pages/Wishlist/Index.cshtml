@@ -11,7 +11,7 @@
 
 <div class="container">
 
-    @if (Model.WishlistModel.Items.Any())
+    @if (Model.WishlistViewModel.Items.Any())
     {
         <form method="post">
             <article class="esh-basket-titles row">
@@ -21,9 +21,9 @@
                 <section class="esh-basket-title col-xs-2">Price</section>
             </article>
             <div class="esh-catalog-items row">
-                @for (int i = 0; i < Model.WishlistModel.Items.Count; i++)
+                @for (int i = 0; i < Model.WishlistViewModel.Items.Count; i++)
                 {
-                    var item = Model.WishlistModel.Items[i];
+                    var item = Model.WishlistViewModel.Items[i];
                     <article class="esh-basket-items row">
                         <div>
                             <section class="esh-basket-item esh-basket-item--middle col-lg-3 hidden-lg-down">
@@ -31,49 +31,39 @@
                             </section>
                             <section class="esh-basket-item esh-basket-item--middle col-xs-3">@item.ProductName</section>
                             <section class="esh-basket-item esh-basket-item--middle col-xs-2">$ @item.CatalogItemId.ToString("N2")</section>
-                            <section class="esh-basket-item esh-basket-item--middle esh-basket-item--mark col-xs-2">$ @item.PictureUrl</section>
+                            
+                            <section> 
+                            <input class="esh-catalog-button" asp-page="/Wishlist/TransferItemToBasket" type="submit" value="[ ADD TO BASKET ]" />
+        <input type="hidden" asp-for="@item.Id" name="id" />
+  
+                            </section>
+                           
+                            
                         </div>
                         <div class="row">
                             
                         </div>
                     </article>
-                    @*<div class="esh-catalog-item col-md-4">
-                @item.ProductId
-            </div>*@
-
-                }
-
+                    }
+</form>
                 <div class="container">
                     <article class="esh-basket-titles esh-basket-titles--clean row">
                         <section class="esh-basket-title col-xs-10"></section>
-                        <section class="esh-basket-title col-xs-2">Total</section>
+                        <section class="esh-basket-title col-xs-2">Total Items in Wishlist</section>
                     </article>
 
                     <article class="esh-basket-items row">
                         <section class="esh-basket-item col-xs-10"></section>
-                        <section class="esh-basket-item esh-basket-item--mark col-xs-2">$ @Model.WishlistModel.Items.Count().ToString("N2")</section>
+                        <section class="esh-basket-item esh-basket-item--mark col-xs-2">@Model.WishlistViewModel.Items.Count().ToString()</section>
                     </article>
 
-                    <article class="esh-basket-items row">
-                        <section class="esh-basket-item col-xs-7"></section>
-                        <section class="esh-basket-item col-xs-2">
-                            @*<button class="btn esh-basket-checkout" name="name" value="" type="submit">[ Update ]</button>*@
-                        </section>
-                    </article>
-                </div>
+                      </div>
                 <div class="row">
                     <section class="esh-basket-item col-xs-1">
                         <a asp-page="/Index" class="btn esh-basket-checkout text-white">[ Continue Shopping ]</a>
                     </section>
-                    <section class="esh-basket-item col-xs-push-7 col-xs-4">
-
-                    <input type="submit" asp-page="Checkout"
-                               class="btn esh-basket-checkout"
-                               value="[ Checkout ]" name="action" />
-                    </section>
-                </div>
-            </div>
-        </form>
+                    </div>
+   
     }
     else
     {

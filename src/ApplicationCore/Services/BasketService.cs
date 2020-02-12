@@ -13,6 +13,10 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly IAppLogger<BasketService> _logger;
 
+        public BasketService()
+        {
+        }
+
         public BasketService(IAsyncRepository<Basket> basketRepository,
             IAppLogger<BasketService> logger)
         {

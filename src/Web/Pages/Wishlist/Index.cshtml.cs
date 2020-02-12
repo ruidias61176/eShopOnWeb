@@ -33,7 +33,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Wishlist
             _basketViewModelService = basketViewModelService;
         }
 
-        public WishlistViewModel WishlistModel { get; set; } = new WishlistViewModel();
+        public WishlistViewModel WishlistViewModel { get; set; } = new WishlistViewModel();
         public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
 
         public async Task OnGet()
@@ -49,7 +49,7 @@ namespace Microsoft.eShopWeb.Web.Pages.Wishlist
             }
             await SetWishlistModelAsync();
 
-            await _wishlistService.AddWishlistItemToBasket(WishlistModel.Id, BasketModel.Id, productDetails.Id, productDetails.Price, 1);
+            await _wishlistService.AddWishlistItem(WishlistViewModel.Id, productDetails.Id, productDetails.Price);
 
             await SetWishlistModelAsync();
 
@@ -60,12 +60,14 @@ namespace Microsoft.eShopWeb.Web.Pages.Wishlist
         {
             if (_signInManager.IsSignedIn(HttpContext.User))
             {
-                WishlistModel = await _wishlistViewModelService.GetOrCreateWishlistForUser(User.Identity.Name);
+                WishlistViewModel = await _wishlistViewModelService.GetOrCreateWishlistForUser(User.Identity.Name);
+                BasketModel  = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);
             }
             else
             {
                 GetOrSetWishlistCookieAndUserName();
-                WishlistModel = await _wishlistViewModelService.GetOrCreateWishlistForUser(_username);
+                WishlistViewModel = await _wishlistViewModelService.GetOrCreateWishlistForUser(_username);
+                BasketModel  = await _basketViewModelService.GetOrCreateBasketForUser(_username);
             }
         }
 

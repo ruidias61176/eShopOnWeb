@@ -9,6 +9,8 @@ namespace Microsoft.eShopWeb.Web.ViewModels
         public string PictureUri { get; set; }
         public decimal Price { get; set; }
         public bool ShowPrice {get; set; }
+        public string StoreName {get; set;}
+        public int Stock {get; set;}
         public Currency PriceUnit {get; set;}
 
     }

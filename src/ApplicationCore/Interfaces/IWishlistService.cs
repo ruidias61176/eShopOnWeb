@@ -7,7 +7,8 @@ namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
     {
         Task<int> GetWishlistItemCountAsync(string userName);
         Task TransferWishlistAsync(string anonymousId, string userName);
-        Task AddWishlistItemToBasket(int wishlistId, int basketId, int catalogItemId, decimal price, int quantity = 1);
+        Task TransferWishlistItemToBasket(int wishListItemId, int basketId, int catalogItemId, int quantity = 1);
+        Task AddWishlistItem(int wishlistId, int catalogItemId, decimal price);
         Task DeleteWishlistAsync(int wishlistId);
     }
 }

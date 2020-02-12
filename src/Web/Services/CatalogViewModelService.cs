@@ -60,6 +60,8 @@ namespace Microsoft.eShopWeb.Web.Services
             {
                 Id = catalogItem.Id,
                 Name = catalogItem.Name,
+                StoreName = catalogItem.StoreName,
+                Stock = catalogItem.Stock,
                 PictureUri = catalogItem.PictureUri,
                 Price = await (convertPrice
                         ? _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, USER_PRICE_UNIT, cancellationToken)

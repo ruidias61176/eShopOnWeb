@@ -6,29 +6,56 @@ using System.Linq;
 using Ardalis.GuardClauses;
 using Microsoft.eShopWeb.ApplicationCore.Entities.WishlistAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Entities;
+using Microsoft.eShopWeb.ApplicationCore.Exceptions;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Services
 {
     public class WishlistService : IWishlistService
     {
         private readonly IAsyncRepository<Wishlist> _wishlistRepository;
+        private readonly IAsyncRepository<CatalogItem> _catalogItemRepository;
+        private readonly IAsyncRepository<WishlistItem> _wishlistItemRepository;
         private readonly IBasketService _basketService;
         private readonly IAppLogger<WishlistService> _logger;
 
         public WishlistService(
-            IAsyncRepository<Wishlist> wishlistRepository, IBasketService basketService, IAppLogger<WishlistService> logger)
+            IAsyncRepository<Wishlist> wishlistRepository,
+            IAsyncRepository<CatalogItem> catalogItemRepository,
+            IAsyncRepository<WishlistItem> wishlistItemRepository,
+            IBasketService basketService,
+            IAppLogger<WishlistService> logger)
         {
             _wishlistRepository = wishlistRepository;
+            _wishlistItemRepository= wishlistItemRepository;
             _basketService = basketService;
+            _catalogItemRepository = catalogItemRepository;
             _logger = logger;
         }
 
-        public async Task AddWishlistItemToBasket(int wishlistId, int basketId, int catalogItemId, decimal price, int quantity = 1)
+        public async Task AddWishlistItem(int wishlistId, int catalogItemId, decimal price)
         {
             var wishlist = await _wishlistRepository.GetByIdAsync(wishlistId);
-            await _basketService.AddItemToBasket(basketId, catalogItemId, price, quantity);
-            wishlist.RemoveWishlistItem(catalogItemId);
+            if (wishlist.Items.Any(x => x.CatalogItemId == catalogItemId)) {
+                throw new ItemAlreadyInWishlist("Item already in wishlist!");
+            }
+            
+             // TODO: null?
+            var catalogItem = await _catalogItemRepository.GetByIdAsync(catalogItemId);
+            // TODO: null?
+            wishlist.AddItemToWishlist(catalogItem.Id, catalogItem.Name, catalogItem.Price);
             await _wishlistRepository.UpdateAsync(wishlist);
+        }
+
+        public async Task TransferWishlistItemToBasket(int wishListItemId, int basketId, int catalogItemId, int quantity = 1)
+        {
+            var wishListItem = await _wishlistItemRepository.GetByIdAsync(wishListItemId);
+            if (wishListItem == null) {
+                // TODO: Erro
+            }
+            var catalogItem = await _catalogItemRepository.GetByIdAsync(wishListItem.CatalogItemId);
+            await _basketService.AddItemToBasket(basketId, wishListItem.CatalogItemId, catalogItem.Price, quantity);
+            await _wishlistItemRepository.DeleteAsync(wishListItem);
         }
 
         public async Task DeleteWishlistAsync(int wishlistId)

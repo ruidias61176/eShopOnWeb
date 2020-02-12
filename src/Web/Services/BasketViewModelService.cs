@@ -25,7 +25,6 @@ namespace Microsoft.eShopWeb.Web.Services
             _uriComposer = uriComposer;
             _itemRepository = itemRepository;
         }
-
         public async Task<BasketViewModel> GetOrCreateBasketForUser(string userName)
         {
             var basketSpec = new BasketWithItemsSpecification(userName);

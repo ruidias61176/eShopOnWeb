@@ -1,6 +1,8 @@
-﻿namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishlistAggregate
+﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+
+namespace Microsoft.eShopWeb.ApplicationCore.Entities.WishlistAggregate
 {
-    public class WishlistItem : BaseEntity
+    public class WishlistItem : BaseEntity, IAggregateRoot
     {
         public string CatalogItemName { get; set; }
         public decimal UnitPrice { get; set; }

@@ -35,10 +35,5 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
                 return NotFound();
             }
         }
-
-        
-
-   
-
     }
 }

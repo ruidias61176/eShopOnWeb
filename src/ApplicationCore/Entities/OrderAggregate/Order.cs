@@ -5,6 +5,14 @@ using System.Collections.Generic;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 {
+    public enum OrderStatus
+    {
+        Pending,
+        Processing,
+        Dispatched,
+        Complete,
+        Cancelled
+    }
     public class Order : BaseEntity, IAggregateRoot
     {
         private Order()
@@ -12,7 +20,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
             // required by EF
         }
 
-        public Order(string buyerId, Address shipToAddress, List<OrderItem> items)
+        public Order(string buyerId, Address shipToAddress, List<OrderItem> items, OrderStatus orderStatus)
         {
             Guard.Against.NullOrEmpty(buyerId, nameof(buyerId));
             Guard.Against.Null(shipToAddress, nameof(shipToAddress));
@@ -21,11 +29,14 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
             BuyerId = buyerId;
             ShipToAddress = shipToAddress;
             _orderItems = items;
+            Status = orderStatus;
         }
         public string BuyerId { get; private set; }
 
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
+
+        public OrderStatus Status { get; set; }
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

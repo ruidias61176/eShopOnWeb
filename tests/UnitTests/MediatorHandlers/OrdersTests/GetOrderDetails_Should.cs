@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using static Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Order;
 
 namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
 {
@@ -17,7 +18,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
         {
             var item = new OrderItem(new CatalogItemOrdered(1, "ProductName", "URI"), 10.00m, 10);
             var address = new Address(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>());
-            Order order = new Order("buyerId", address, new List<OrderItem> { item });
+            Order order = new Order("buyerId", address, new List<OrderItem> { item }, OrderStatus.Pending);
 
             _mockOrderRepository = new Mock<IOrderRepository>();
             _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<ISpecification<Order>>())).ReturnsAsync(new List<Order> { order });

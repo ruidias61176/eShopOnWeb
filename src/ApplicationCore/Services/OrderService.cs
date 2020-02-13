@@ -23,7 +23,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task CreateOrderAsync(int basketId, Address shippingAddress)
+        public async Task CreateOrderAsync(int basketId, Address shippingAddress, OrderStatus orderStatus = OrderStatus.Pending)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
             Guard.Against.NullBasket(basketId, basket);
@@ -35,9 +35,10 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
                 var orderItem = new OrderItem(itemOrdered, item.UnitPrice, item.Quantity);
                 items.Add(orderItem);
             }
-            var order = new Order(basket.BuyerId, shippingAddress, items);
+            var order = new Order(basket.BuyerId, shippingAddress, items, orderStatus);
 
             await _orderRepository.AddAsync(order);
         }
+
     }
 }

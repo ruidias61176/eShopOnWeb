@@ -1,5 +1,6 @@
 ﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
+using static Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Order;
 
 namespace Microsoft.eShopWeb.UnitTests.Builders
 {
@@ -12,6 +13,7 @@ namespace Microsoft.eShopWeb.UnitTests.Builders
         public string TestPictureUri => "http://test.com/image.jpg";
         public decimal TestUnitPrice = 1.23m;
         public int TestUnits = 3;
+
         public CatalogItemOrdered TestCatalogItemOrdered { get; }
 
         public OrderBuilder()
@@ -29,19 +31,19 @@ namespace Microsoft.eShopWeb.UnitTests.Builders
         {
             var orderItem = new OrderItem(TestCatalogItemOrdered, TestUnitPrice, TestUnits);
             var itemList = new List<OrderItem>() { orderItem };
-            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), itemList);
+            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), itemList, OrderStatus.Pending);
             return _order;
         }
 
         public Order WithNoItems()
         {
-            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), new List<OrderItem>());
+            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), new List<OrderItem>(), OrderStatus.Pending);
             return _order;
         }
 
         public Order WithItems(List<OrderItem> items)
         {
-            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), items);
+            _order = new Order(TestBuyerId, new AddressBuilder().WithDefaultValues(), items, OrderStatus.Pending);
             return _order;
         }
     }

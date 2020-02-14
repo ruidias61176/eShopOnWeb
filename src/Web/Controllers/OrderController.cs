@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.Web.Features.MyOrders;
 using Microsoft.eShopWeb.Web.Features.OrderDetails;
+using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 
 namespace Microsoft.eShopWeb.Web.Controllers
@@ -14,7 +15,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
     {
         private readonly IMediator _mediator;
 
-        public OrderController(IMediator mediator)
+        public OrderController(IMediator mediator, IStringLocalizer<OrderController> stringLocalizer)
         {
             _mediator = mediator;
         }

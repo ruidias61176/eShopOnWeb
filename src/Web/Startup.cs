@@ -75,6 +75,12 @@ namespace Microsoft.eShopWeb.Web
                 options.UseInMemoryDatabase("Identity"));
 
             ConfigureServices(services);
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
         }
 
         public void ConfigureProductionServices(IServiceCollection services)
@@ -253,13 +259,14 @@ namespace Microsoft.eShopWeb.Web
                 app.UseHsts();
             }
 
-var supportedCultures = new[]
-            {
+            var supportedCultures = new[]
+                        {
                 "en-US",
                 "pt-PT",
             };
 
-            app.UseRequestLocalization(options => {
+            app.UseRequestLocalization(options =>
+            {
 
                 options.SetDefaultCulture("en-US");
                 // Formatting numbers, dates, etc.

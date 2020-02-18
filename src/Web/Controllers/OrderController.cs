@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Web.Features.MyOrders;
@@ -30,11 +31,13 @@ namespace Microsoft.eShopWeb.Web.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IOrderRepository _orderRepository;
+        private readonly IStringLocalizer<OrderController> _stringLocalizer;
 
-        public OrderController(IMediator mediator, IOrderRepository orderRepository)
+        public OrderController(IMediator mediator, IOrderRepository orderRepository, IStringLocalizer<OrderController> stringLocalizer)
         {
             _mediator = mediator;
-             _orderRepository =  orderRepository;
+            _orderRepository = orderRepository;
+            _stringLocalizer = stringLocalizer;
         }
 
         [HttpGet()]
@@ -73,7 +76,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
             //await _mediator.Send(updatedOrder, cancellationToken);
             return View(updatedOrder);
         }
-        
+
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(OrderToDelete request)
         {

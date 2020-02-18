@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.eShopWeb.Web.Services;
 using Microsoft.eShopWeb.Web.ViewModels;
@@ -10,9 +11,14 @@ using Microsoft.eShopWeb.Web.Extensions;
 namespace Microsoft.eShopWeb.Web.Pages {
     public class IndexModel : PageModel {
         private readonly ICatalogViewModelService _catalogViewModelService;
+        private readonly IStringLocalizer<IndexModel> _stringLocalizer;
+        private readonly IHtmlLocalizer<IndexModel> _htmlLocalizer;
 
-        public IndexModel(ICatalogViewModelService catalogViewModelService) {
+        public IndexModel(ICatalogViewModelService catalogViewModelService,             IStringLocalizer<IndexModel> stringLocalizer,
+            IHtmlLocalizer<IndexModel> htmlLocalizer) {
             _catalogViewModelService = catalogViewModelService;
+            _stringLocalizer = stringLocalizer;
+            _htmlLocalizer = htmlLocalizer;
         }
 
         public CatalogIndexViewModel CatalogModel { get; set; } = new CatalogIndexViewModel();

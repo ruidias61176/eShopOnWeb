@@ -23,7 +23,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Wishlist
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IBasketService _basketService;
         private readonly IAsyncRepository<CatalogItem> _catalogItemRepository;
-        private string _username = null;
+        //TODO:
+        //private string _username = null;
         private readonly IWishlistViewModelService _wishlistViewModelService;
 
         public TransferItemToBasketModel(IWishlistService wishlistService,

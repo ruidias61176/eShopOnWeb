@@ -33,8 +33,6 @@ namespace Microsoft.eShopWeb.Web.Services
             var TemplateBody = configuration.GetValue<string>("SendGrid:templateBody");
         }
 
-        private string TemplateSubject;
-        private string TemplateBody;
         public async Task OrderStatusNotifyAsync(int orderId, OrderStatus newOrderStatus)
         {
             var existingOrder = await _orderRepository.GetByIdAsync(orderId);
@@ -45,6 +43,8 @@ namespace Microsoft.eShopWeb.Web.Services
             }
         }
 
+        private string templateSubjectFrom = "";
+        private string templateBodyFrom = "";
         public async Task OrderStatusNotify(string email, Order orderId, OrderStatus newOrderStatus)
         {
             var statusIdle = false;
@@ -52,11 +52,11 @@ namespace Microsoft.eShopWeb.Web.Services
             if (statusIdle)
             {
                 MemberRenamerDelegate memberRenamer = member => member.Name;
-                var templateContentSubject = await File.ReadAllTextAsync(TemplateSubject);
+                var templateContentSubject = await File.ReadAllTextAsync(templateSubjectFrom);
                 var templateSubject = Template.Parse(templateContentSubject);
                 var subject = templateSubject.Render(new { OrderId = orderId }, memberRenamer);
                 string from = "Rui Dias";
-                var templateContentBody = await File.ReadAllTextAsync(TemplateBody);
+                var templateContentBody = await File.ReadAllTextAsync(templateBodyFrom);
                 var templateBody = Template.Parse(templateContentBody);
                 var message = templateBody.Render(
                         new { OrderId = orderId, From = from, NewOrderStatus = newOrderStatus != orderId.Status }

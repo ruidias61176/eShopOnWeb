@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using Ardalis.ListStartupServices;
-
 using Infrastructure.Services;
 using Infrastructure.Services.CurrencyService;
-
 using MediatR;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -30,15 +31,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-
 using Newtonsoft.Json;
-
 using Web.Extensions;
 using Web.Extensions.Middleware;
 using Microsoft.eShopWeb.Web.Extensions;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
+[assembly: ResourceLocation("Resources")]
+[assembly: RootNamespace("Microsoft.eShopWeb.Web")]
 namespace Microsoft.eShopWeb.Web
 {
     public class Startup
@@ -172,13 +173,21 @@ namespace Microsoft.eShopWeb.Web
                 // IOutboundParameterTransformer implementation
                 options.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
             });
-
+            services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
             services.AddMvc(options =>
             {
                 options.Conventions.Add(new RouteTokenTransformerConvention(
                     new SlugifyParameterTransformer()));
+            })
+            .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, options =>
+            {
+                options.ResourcesPath = "Resources";
+            })
+                .AddDataAnnotationsLocalization();
 
-            });
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/Basket/Checkout");
@@ -199,10 +208,11 @@ namespace Microsoft.eShopWeb.Web
             });
 
             // The following line enables Application Insights telemetry collection.
-            services.AddApplicationInsightsTelemetry(config =>{
+            services.AddApplicationInsightsTelemetry(config =>
+            {
                 TelemetryDebugWriter.IsTracingDisabled = true;
             });
-            
+
 
             _services = services; // used to debug registered services
         }
@@ -243,6 +253,25 @@ namespace Microsoft.eShopWeb.Web
                 app.UseHsts();
             }
 
+var supportedCultures = new[]
+            {
+                "en-US",
+                "pt-PT",
+            };
+
+            app.UseRequestLocalization(options => {
+
+                options.SetDefaultCulture("en-US");
+                // Formatting numbers, dates, etc.
+                options.AddSupportedCultures(supportedCultures);
+                // UI strings that we have localized.
+                options.AddSupportedUICultures(supportedCultures);
+                options.RequestCultureProviders = new IRequestCultureProvider[] {
+                    new QueryStringRequestCultureProvider(),
+                    new CookieRequestCultureProvider(),
+                    new CookieRequestCultureProvider(),
+                };
+            });
             app.UseStaticFiles();
 
             app.UseRouting();

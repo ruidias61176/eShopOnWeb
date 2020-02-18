@@ -5,6 +5,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 using System.Collections.Generic;
 using Ardalis.GuardClauses;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+using ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Services
 {

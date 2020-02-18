@@ -1,0 +1,46 @@
+﻿@page 
+@{
+    ViewData["Title"] = "Admin - Edit Orders";
+    @model IEnumerable<OrderViewModel>
+}
+<div class="esh-orders">
+    <div class="container">
+        <h1>@ViewData["Title"]</h1>
+        <article class="esh-orders-titles row">
+            <section class="esh-orders-title col-xs-2">Order number</section>
+            <section class="esh-orders-title col-xs-4">Date</section>
+            <section class="esh-orders-title col-xs-2">Total</section>
+            <section class="esh-orders-title col-xs-2">Status</section>
+            <section class="esh-orders-title col-xs-2"></section>
+        </article>
+        <form method="post">
+             @if (Model != null && Model.Any())
+        {
+        @foreach (var order in Model)
+            {
+                <article class="esh-orders-items row">
+                    <section class="esh-orders-item col-xs-2">@Html.DisplayFor(modelItem => order.OrderNumber)</section>
+                    <section class="esh-orders-item col-xs-4">@Html.DisplayFor(modelItem => order.OrderDate)</section>
+                    <section class="esh-orders-item col-xs-2">$ @Html.DisplayFor(modelItem => order.Total)</section>
+                    <section class="esh-orders-item col-xs-2">@Html.DisplayFor(modelItem => order.Status)</section>
+                    <section class="esh-orders-item col-xs-1">
+                        <a class="esh-orders-link" asp-controller="EditOrder" asp-action="EditOrderDetail" asp-route-orderId="@order.OrderNumber">Detail</a>
+                    </section>
+                    <section class="esh-orders-item col-xs-1">
+                        @if (order.Status.ToString() == "Pending")
+                    {
+                            <a class="esh-orders-link" asp-controller="Order" asp-action="cancel" asp-route-orderId="@order.OrderNumber">Cancel</a>
+                        }
+                    </section>
+                </article>
+            }
+        }
+        </form>
+       
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

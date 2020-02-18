@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "My Order History";
 }
-
 <div class="esh-orders">
     <div class="container">
         <h1>@ViewData["Title"]</h1>
@@ -26,7 +25,7 @@
                         <a class="esh-orders-link" asp-controller="Order" asp-action="Detail" asp-route-orderId="@item.OrderNumber">Detail</a>
                     </section>
                     <section class="esh-orders-item col-xs-1">
-                        @if (item.Status.ToLower() == "submitted")
+                        @if (item.Status.ToString() == "Pending")
                     {
                             <a class="esh-orders-link" asp-controller="Order" asp-action="cancel" asp-route-orderId="@item.OrderNumber">Cancel</a>
                         }

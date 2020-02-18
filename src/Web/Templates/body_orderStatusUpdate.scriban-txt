@@ -1,0 +1,8 @@
+Hi {{ memberRenamer }},
+
+Your order status has been updated.
+
+"Your order is now with the status {{newOrderStatus}}."
+
+Best Regards,
+{{from}}

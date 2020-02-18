@@ -172,7 +172,7 @@ a:active {
 
 .esh-identity:hover .esh-identity-drop {
     border: 1px solid #eee;
-    height: 10rem;
+    height: 30rem;
     transition: height .35s
 }
 

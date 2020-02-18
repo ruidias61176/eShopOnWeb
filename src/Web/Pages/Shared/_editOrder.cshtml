@@ -1,0 +1,13 @@
+﻿@model OrderViewModel
+
+<form asp-page="/Admin/EditOrder" method="get">
+    <div>
+        <img class="esh-catalog-thumbnail" src="@Model.OrderNumber" />
+        <div class="esh-catalog-name">
+            <span>@Model.OrderDate</span>
+        </div>
+        <input class="esh-catalog-button" type="submit" value="[ Edit ]" />
+        <input type="hidden" asp-for="@Model.OrderNumber" name="id" />
+        <input type="hidden" asp-for="@Model.Status" name="name" />
+      </div>
+</form>

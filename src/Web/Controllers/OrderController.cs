@@ -1,27 +1,40 @@
-﻿using MediatR;
+﻿using ApplicationCore.Entities.OrderAggregate;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Web.Features.MyOrders;
 using Microsoft.eShopWeb.Web.Features.OrderDetails;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OrderStatus = Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.OrderStatus;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
+    public class OrderToUpdate : IRequest<Order>
+    {
+        public int OrderId { get; set; }
+        public OrderStatus StatusToUpdate { get; set; }
+    }
+
+    public class OrderToDelete : IRequest
+    {
+        public int OrderId { get; set; }
+    }
+
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize] // Controllers that mainly require Authorization still use Controller/View; other pages use Pages
     [Route("[controller]/[action]")]
-    public class OrderController : Controller, IRequest<Order>
+    public class OrderController : Controller
     {
         private readonly IMediator _mediator;
         private readonly IOrderRepository _orderRepository;
 
-        public OrderController(IMediator mediator)
+        public OrderController(IMediator mediator, IOrderRepository orderRepository)
         {
             _mediator = mediator;
+             _orderRepository =  orderRepository;
         }
 
         [HttpGet()]
@@ -46,17 +59,27 @@ namespace Microsoft.eShopWeb.Web.Controllers
         }
 
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> OrderStatusUpdate(int orderId, OrderStatus newStatus)
+        public async Task<IActionResult> UpdateOrder(OrderToUpdate request, CancellationToken cancellationToken)
         {
-            var formerStatus = await _orderRepository.GetByIdAsync(orderId);
-            var newOrderStatus = new OrderStatus();
-            var viewModel = await _mediator.Send(new UpdateOrderStatus(orderId, newOrderStatus));
-            if (viewModel == null)
+            var viewModel = await _mediator.Send((new UpdateOrderStatus(request.OrderId, request.StatusToUpdate)));
+            var order = request.OrderId;
+            if (order != viewModel.OrderNumber)
             {
-                return BadRequest();
+                throw new Exception("Orders Ids do not match");
             }
-            await _orderRepository.UpdateAsync(formerStatus);
-            return View(newOrderStatus);
+            var updatedOrder = new OrderStatus();
+            updatedOrder = request.StatusToUpdate;
+            //TODO:
+            //await _mediator.Send(updatedOrder, cancellationToken);
+            return View(updatedOrder);
         }
+        
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteOrder(OrderToDelete request)
+        {
+            await _mediator.Send(request);
+            return Ok();
+        }
+
     }
 }

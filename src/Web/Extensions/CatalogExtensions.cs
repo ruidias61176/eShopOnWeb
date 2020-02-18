@@ -27,6 +27,7 @@ namespace Microsoft.eShopWeb.Web.Extensions
             services.AddScoped<CatalogViewModelService>();
             services.AddScoped<ICatalogItemViewModelService, CatalogItemViewModelService>();
             services.Configure<CatalogSettings>(configuration);
+            services.AddScoped<OrderNotificationsService>();
             services.AddSingleton<IUriComposer>(new UriComposer(configuration.Get<CatalogSettings>()));
 
         }

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using ApplicationCore.Entities.OrderAggregate;
 using MediatR;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.Web.ViewModels;

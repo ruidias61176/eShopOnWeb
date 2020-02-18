@@ -2,17 +2,11 @@
 using Ardalis.GuardClauses;
 using System;
 using System.Collections.Generic;
+using ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 {
-    public enum OrderStatus
-    {
-        Pending,
-        Processing,
-        Dispatched,
-        Complete,
-        Cancelled
-    }
+    
     public class Order : BaseEntity, IAggregateRoot
     {
         private Order()
@@ -32,11 +26,9 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
             Status = orderStatus;
         }
         public string BuyerId { get; private set; }
-
         public DateTimeOffset OrderDate { get; private set; } = DateTimeOffset.Now;
         public Address ShipToAddress { get; private set; }
-
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status {get; set;}
 
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation

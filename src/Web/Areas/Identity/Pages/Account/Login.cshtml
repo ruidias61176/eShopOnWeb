@@ -54,9 +54,9 @@
                     </p>
                 </form>
 <p>Log in using Social Media</p>
-                <form method="post" asp-controller="Manage" asp-action="LinkLogin" asp-page-handler="Facebook">
+                <form method="post">
                 @foreach(var scheme in @Model.ExternalLogins) {
-                    <button type="submit" class="btn btn-primary" name="Facebook" value="@scheme.Name" title="Log in using your @scheme.DisplayName account">@scheme.DisplayName </button>
+                    <button type="submit" asp-page-handler="ExternalLogin" class="btn btn-primary" name="provider" value="@scheme.Name" title="Log in using your @scheme.DisplayName account">@scheme.DisplayName</button>
                 }
                 </form>
                

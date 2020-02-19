@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ApplicationCore.Entities.OrderAggregate;
+using MediatR;
 using Microsoft.eShopWeb.Web.ViewModels;
 
 namespace Microsoft.eShopWeb.Web.Features.OrderDetails
@@ -8,10 +9,13 @@ namespace Microsoft.eShopWeb.Web.Features.OrderDetails
         public string UserName { get; set; }
         public int OrderId { get; set; }
 
-        public GetOrderDetails(string userName, int orderId)
+        public OrderStatus Status { get; set; }
+
+        public GetOrderDetails(string userName, int orderId, OrderStatus status)
         {
             UserName = userName;
             OrderId = orderId;
+            Status = status;
         }
     }
 }

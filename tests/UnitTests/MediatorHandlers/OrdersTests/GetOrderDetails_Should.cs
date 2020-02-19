@@ -28,7 +28,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
         [Fact]
         public async Task NotBeNull_If_Order_Exists()
         {
-            var request = new GetOrderDetails("SomeUserName", 0);
+            var request = new GetOrderDetails("SomeUserName", 0, OrderStatus.Pending);
 
             var handler = new GetOrderDetailsHandler(_mockOrderRepository.Object);
 
@@ -40,7 +40,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
         [Fact]
         public async Task BeNull_If_Order_Not_found()
         {
-            var request = new GetOrderDetails("SomeUserName", 100);
+            var request = new GetOrderDetails("SomeUserName", 100, OrderStatus.Pending);
 
             var handler = new GetOrderDetailsHandler(_mockOrderRepository.Object);
 

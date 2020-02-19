@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
+using Microsoft.eShopWeb.Web.Extensions;
 using Microsoft.eShopWeb.Web.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,23 +23,7 @@ namespace Microsoft.eShopWeb.Web.Features.MyOrders
         {
             var specification = new CustomerOrdersWithItemsSpecification(request.UserName);
             var orders = await _orderRepository.ListAsync(specification);
-
-            return orders.Select(o => new OrderViewModel
-            {
-                OrderDate = o.OrderDate,
-                OrderItems = o.OrderItems?.Select(oi => new OrderItemViewModel()
-                {
-                    PictureUrl = oi.ItemOrdered.PictureUri,
-                    ProductId = oi.ItemOrdered.CatalogItemId,
-                    ProductName = oi.ItemOrdered.ProductName,
-                    UnitPrice = oi.UnitPrice,
-                    Units = oi.Units
-                }).ToList(),
-                OrderNumber = o.Id,
-                ShippingAddress = o.ShipToAddress,
-                Status = o.Status,
-                Total = o.Total()
-            });
+            return orders.Select(order => order.CreateViewModel());
         }
     }
 }

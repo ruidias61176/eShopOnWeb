@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Localization
 
 @inject IViewLocalizer ViewLocalizer
+@inject IStringLocalizer<Startup> StartupLocalizer
 @{
     var uiCulture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.UICulture;
 }

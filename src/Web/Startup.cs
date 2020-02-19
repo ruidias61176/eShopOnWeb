@@ -62,6 +62,8 @@ namespace Microsoft.eShopWeb.Web
             // use in-memory database
             ConfigureInMemoryDatabases(services);
             // use real database
+
+            ConfigureServices(services);
         }
 
         private void ConfigureInMemoryDatabases(IServiceCollection services)
@@ -73,13 +75,6 @@ namespace Microsoft.eShopWeb.Web
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseInMemoryDatabase("Identity"));
-
-            ConfigureServices(services);
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
 
         }
 
@@ -95,7 +90,6 @@ namespace Microsoft.eShopWeb.Web
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
-
             ConfigureServices(services);
         }
         public void ConfigureAzureServices(IServiceCollection services)
@@ -170,6 +164,7 @@ namespace Microsoft.eShopWeb.Web
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, SendgridEmailSender>();
 
+
             // Add memory cache services
             services.AddMemoryCache();
 
@@ -218,7 +213,12 @@ namespace Microsoft.eShopWeb.Web
             {
                 TelemetryDebugWriter.IsTracingDisabled = true;
             });
-
+            
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
 
             _services = services; // used to debug registered services
         }

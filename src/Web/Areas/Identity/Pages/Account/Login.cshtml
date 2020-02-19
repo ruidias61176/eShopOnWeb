@@ -53,6 +53,13 @@
                         Password: <b>Pass@word1</b>
                     </p>
                 </form>
+<p>Log in using Social Media</p>
+                <form method="post" asp-controller="Manage" asp-action="LinkLogin" asp-page-handler="Facebook">
+                @foreach(var scheme in @Model.ExternalLogins) {
+                    <button type="submit" class="btn btn-primary" name="Facebook" value="@scheme.Name" title="Log in using your @scheme.DisplayName account">@scheme.DisplayName </button>
+                }
+                </form>
+               
             </section>
         </div>
     </div>

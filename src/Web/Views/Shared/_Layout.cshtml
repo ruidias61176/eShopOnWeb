@@ -38,6 +38,7 @@
                     <section class="col-lg-5 col-md-4 col-xs-9">
                         <a asp-area="" asp-page="/Index">
                             <img src="~/images/brand.png" alt="eShop On Web" />
+                            
                         </a>
                    <h3>@ViewLocalizer["tagline"]</h3>
                         <a asp-controller="Pdf"
@@ -45,6 +46,10 @@
                             asp-route-url="@Context.Request.Path">
                             <img src="~/images/pdfexport.png" style="width: 80px; padding: 10px 15px;position:right" alt="export to PDF" />
                         </a>
+                        <form>
+                                <a class="" id="pt-PT"  href="/?Culture=pt-PT"> <img src="~/images/ptflag.png" width="32" height="32"></a>
+                                <a class="" id="en-US"  href="/?Culture=en-US"> <img src="~/images/usaflag.png" width="32" height="32"></a>
+                            </form>
                     </section>
                     <partial name="_LoginPartial" />
                 </article>

@@ -12,6 +12,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Configuration;
+using System.Globalization;
+using Infrastructure.Services.CurrencyService;
 
 namespace Microsoft.eShopWeb.Web.Services
 {
@@ -28,8 +31,9 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IUriComposer _uriComposer;
         private readonly ICurrencyService _currencyService;
         private readonly CatalogContext _catalogContext;
-        private const Currency DEFAULT_PRICE_UNIT = Currency.USD; // TODO: Get from Configuration
-        private const Currency USER_PRICE_UNIT = Currency.EUR; // TODO: Get from IUserCurrencyService    
+        private readonly IConfiguration _configuration;
+        private Currency default_price_unit= Currency.USD; // TODO: Get from Configuration
+        private Currency user_price_unit = Currency.EUR; // TODO: Get from IUserCurrencyService    
         public CatalogViewModelService(
             ILoggerFactory loggerFactory,
             IAsyncRepository<CatalogItem> itemRepository,
@@ -37,7 +41,8 @@ namespace Microsoft.eShopWeb.Web.Services
             IAsyncRepository<CatalogType> typeRepository,
             IUriComposer uriComposer,
             ICurrencyService currencyService,
-            CatalogContext catalogContext
+            CatalogContext catalogContext,
+            IConfiguration configuration
         )
         {
             _logger = loggerFactory.CreateLogger<CatalogViewModelService>();
@@ -47,6 +52,11 @@ namespace Microsoft.eShopWeb.Web.Services
             _uriComposer = uriComposer;
             _currencyService = currencyService;
             _catalogContext = catalogContext;
+            _configuration = configuration;
+
+            Enum.TryParse(_configuration["Culture:DefaultCurrencySymbol"], true, out default_price_unit);
+
+            Enum.TryParse(new RegionInfo(CultureInfo.CurrentCulture.Name).ISOCurrencySymbol, true, out user_price_unit);
         }
 
         /// <summary>
@@ -64,10 +74,10 @@ namespace Microsoft.eShopWeb.Web.Services
                 Stock = catalogItem.Stock,
                 PictureUri = catalogItem.PictureUri,
                 Price = await (convertPrice
-                        ? _currencyService.Convert(catalogItem.Price, DEFAULT_PRICE_UNIT, USER_PRICE_UNIT, cancellationToken)
+                        ? _currencyService.Convert(catalogItem.Price, default_price_unit, user_price_unit, cancellationToken)
                         : Task.FromResult(catalogItem.Price)),
                 ShowPrice = catalogItem.ShowPrice,
-                PriceUnit = USER_PRICE_UNIT
+                PriceUnit = user_price_unit
             };
         }
 

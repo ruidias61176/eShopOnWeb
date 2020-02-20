@@ -6,11 +6,13 @@ namespace Infrastructure.Services.CurrencyService
 {
     public class CurrencyServiceStatic : ICurrencyService
     {
-        /// <inheritdoc />
         public Task<decimal> Convert(decimal value, Currency source, Currency target, CancellationToken cancellationToken = default)
         {
-            var convertedValue = value * 1.25m; // TODO: Apply conversion
+            if(target == Currency.EUR){
+            var convertedValue = value * 0.8m;
             return Task.FromResult(convertedValue);
+            }
+            return Task.FromResult(value);
         }
     }
 } 

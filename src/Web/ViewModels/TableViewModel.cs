@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Infrastructure.Services.CurrencyService;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Web.ViewModels;
 

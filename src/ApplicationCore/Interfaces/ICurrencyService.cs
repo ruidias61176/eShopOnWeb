@@ -1,13 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Services.CurrencyService;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
 {
-    public enum Currency {
-        USD,
-        EUR,
-        GBP
-    }
 
     /// <summary>
     /// Abstraction for converting monetary values

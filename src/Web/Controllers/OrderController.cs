@@ -10,6 +10,7 @@ using Microsoft.eShopWeb.Web.Features.OrderDetails;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Constants;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
@@ -62,7 +63,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
 
             return View(viewModel);
         }
-
+        [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder(OrderToUpdate request, CancellationToken cancellationToken)
         {
@@ -79,7 +80,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
              _logger.LogInformation($"Order {request.OrderId} status has been updated to {updatedOrder}");
             return View(updatedOrder);
         }
-
+        [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(OrderToDelete request)
         {

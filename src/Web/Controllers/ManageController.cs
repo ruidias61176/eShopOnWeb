@@ -223,7 +223,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
 
             return RedirectToAction(nameof(SetPassword));
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> ExternalLogins()
         {
@@ -245,6 +245,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> LinkLogin(string provider)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -257,6 +258,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> LinkLoginCallback()
         {
             var user = await _userManager.GetUserAsync(User);

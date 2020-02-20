@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using IronPdf;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Pdf
@@ -8,6 +9,7 @@ namespace Web.Pdf
     [ApiExplorerSettings(IgnoreApi = true)]
     // [Authorize] // Controllers that mainly require Authorization still use Controller/View; other pages use Pages
     [Route("[controller]/[action]")]
+    [Authorize]
     public class PdfController : Controller
     {
 

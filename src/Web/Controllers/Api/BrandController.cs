@@ -7,9 +7,12 @@ using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.eShopWeb.ApplicationCore.Constants;
 
 namespace Microsoft.eShopWeb.Web.Controllers.Api
 {
+    [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
     public class BrandController : BaseApiController
     {
         private readonly IAsyncRepository<CatalogBrand> _brandRepository;
@@ -49,13 +52,14 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
         }
 
         //RETRIEVE
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<CatalogBrand>> ListBrands()
         {
             var brandsList = await _brandRepository.ListAllAsync();
             return Ok(brandsList);
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CatalogBrand>> GetByBrandId(int id)
         {
@@ -69,7 +73,7 @@ namespace Microsoft.eShopWeb.Web.Controllers.Api
                 return NotFound();
             }
         }
-
+        [AllowAnonymous]
         [HttpGet("{name}")]
         public async Task<ActionResult<CatalogBrand>> GetByBrandName(string name)
         {

@@ -32,12 +32,14 @@ namespace Microsoft.eShopWeb.Web.Controllers
         private readonly IMediator _mediator;
         private readonly IOrderRepository _orderRepository;
         private readonly IStringLocalizer<OrderController> _stringLocalizer;
+        private readonly IAppLogger<OrderController> _logger;
 
-        public OrderController(IMediator mediator, IOrderRepository orderRepository, IStringLocalizer<OrderController> stringLocalizer)
+        public OrderController(IMediator mediator, IOrderRepository orderRepository, IStringLocalizer<OrderController> stringLocalizer, IAppLogger<OrderController> logger)
         {
             _mediator = mediator;
             _orderRepository = orderRepository;
             _stringLocalizer = stringLocalizer;
+            _logger = logger;
         }
 
         [HttpGet()]
@@ -74,6 +76,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
             updatedOrder = request.StatusToUpdate;
             //TODO:
             //await _mediator.Send(updatedOrder, cancellationToken);
+             _logger.LogInformation($"Order {request.OrderId} status has been updated to {updatedOrder}");
             return View(updatedOrder);
         }
 
@@ -81,6 +84,7 @@ namespace Microsoft.eShopWeb.Web.Controllers
         public async Task<IActionResult> DeleteOrder(OrderToDelete request)
         {
             await _mediator.Send(request);
+            _logger.LogInformation($"Order {request.OrderId} status has been deleted");
             return Ok();
         }
 

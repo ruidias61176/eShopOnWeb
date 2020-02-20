@@ -10,11 +10,11 @@ using System.Linq;
 
 namespace Microsoft.eShopWeb.Web.Controllers.Api
 {
-    public class BrandsController : BaseApiController
+    public class BrandController : BaseApiController
     {
         private readonly IAsyncRepository<CatalogBrand> _brandRepository;
 
-        public BrandsController(IAsyncRepository<CatalogBrand> brandRepository) => _brandRepository = brandRepository;
+        public BrandController(IAsyncRepository<CatalogBrand> brandRepository) => _brandRepository = brandRepository;
 
         //CREATE
         [HttpPost]

@@ -44,6 +44,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             var catalogItem = await _catalogItemRepository.GetByIdAsync(catalogItemId);
             // TODO: null?
             wishlist.AddItemToWishlist(catalogItem.Id, catalogItem.Name, catalogItem.Price);
+            _logger.LogInformation($"Wishlist {wishlistId} has a new item {catalogItem.Id} {catalogItem.Name}.");
             await _wishlistRepository.UpdateAsync(wishlist);
         }
 

@@ -116,7 +116,6 @@ namespace Microsoft.eShopWeb.Web.Areas.Identity.Pages.Account
             return new ChallengeResult(provider, properties);
         }
 
-        //TODO:
         public async Task<IActionResult> LinkExternalLoginCallback()
         {
             var user = await _userManager.GetUserAsync(User);

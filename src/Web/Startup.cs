@@ -300,7 +300,7 @@ namespace Microsoft.eShopWeb.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller:slugify=Home}/{action:slugify=Index}/{id?}");
-                //TODO: alterar depois de instalar login? 
+                //Alterar se for necessário utilizar login
                 //endpoints.MapControllerRoute("default", "{controller:slugify=Home}/{action:slugify=Login}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("home_page_health_check");

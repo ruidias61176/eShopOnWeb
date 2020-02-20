@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Text;
 
 namespace Microsoft.eShopWeb.Web.Extensions
 {
-        public class InvalidPageIndexException: Exception {
+    public class InvalidPageIndexException : Exception
+    {
 
     }
     public static class CacheHelpers
@@ -13,16 +15,29 @@ namespace Microsoft.eShopWeb.Web.Extensions
         public static string GenerateCatalogItemCacheKey(int pageIndex, int itemsPage,
             string searchText, int? brandId, int? typeId)
         {
-            if (pageIndex < 0) {
+            if (pageIndex < 0)
+            {
                 throw new InvalidPageIndexException();
             }
             return string.Format(
                 _itemsKeyTemplate, pageIndex, itemsPage, brandId, typeId,
-                searchText ?? string.Empty // TODO: Handle invalid special chars in cache keys?
+                searchText ?? string.Empty.RemoveSpecialCharacters()
             );
         }
 
-   public static string GenerateCatalogItemIdKey(int id)
+        public static string RemoveSpecialCharacters(this string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+        public static string GenerateCatalogItemIdKey(int id)
         {
             return $"catalog_item_{id}";
         }

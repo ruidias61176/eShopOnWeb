@@ -11,10 +11,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
+using Microsoft.eShopWeb.Web.Services;
+using Microsoft.eShopWeb.Web.Controllers.Api;
+using System.Collections.Generic;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
-    public class OrderToUpdate : IRequest<Order>
+    public class OrderToUpdate : BaseApiController, IRequest<Order>
     {
         public int OrderId { get; set; }
         public OrderStatus StatusToUpdate { get; set; }
@@ -31,11 +34,11 @@ namespace Microsoft.eShopWeb.Web.Controllers
     public class OrderController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IOrderRepository _orderRepository;
+        private readonly IAsyncRepository<Order> _orderRepository;
         private readonly IStringLocalizer<OrderController> _stringLocalizer;
         private readonly IAppLogger<OrderController> _logger;
 
-        public OrderController(IMediator mediator, IOrderRepository orderRepository, IStringLocalizer<OrderController> stringLocalizer, IAppLogger<OrderController> logger)
+        public OrderController(IMediator mediator, IAsyncRepository<Order> orderRepository, IStringLocalizer<OrderController> stringLocalizer, IAppLogger<OrderController> logger)
         {
             _mediator = mediator;
             _orderRepository = orderRepository;
@@ -65,29 +68,31 @@ namespace Microsoft.eShopWeb.Web.Controllers
         }
         [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> UpdateOrder(OrderToUpdate request, CancellationToken cancellationToken)
+        public async Task<ActionResult<OrderStatus>> UpdateOrder(int orderId, OrderToUpdate request, EqualityComparer<OrderStatus> comparer, CancellationToken cancellationToken)
         {
-            var viewModel = await _mediator.Send((new UpdateOrderStatus(request.OrderId, request.StatusToUpdate)));
-            var order = request.OrderId;
-            if (order != viewModel.OrderNumber)
+            try
             {
-                throw new Exception("Orders Ids do not match");
+                var orderToUpdate = await _orderRepository.GetByIdAsync(orderId);
+                var updatedOrder = Comparer<OrderStatus>.Default;
+                updatedOrder.Compare(orderToUpdate.Status, request.StatusToUpdate);
+                await _orderRepository.UpdateAsync(orderToUpdate);
+                _logger.LogInformation($"Order {request.OrderId} status has been updated to {request.StatusToUpdate}");
+                return Ok(request);
             }
-            var updatedOrder = new OrderStatus();
-            updatedOrder = request.StatusToUpdate;
-            //TODO:
-            //await _mediator.Send(updatedOrder, cancellationToken);
-             _logger.LogInformation($"Order {request.OrderId} status has been updated to {updatedOrder}");
-            return View(updatedOrder);
+            catch (ModelNotFoundException orderStatusError)
+            {
+                return BadRequest(orderStatusError);
+            }
         }
-        [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
-        [HttpDelete("{orderId}")]
-        public async Task<IActionResult> DeleteOrder(OrderToDelete request)
-        {
-            await _mediator.Send(request);
-            _logger.LogInformation($"Order {request.OrderId} status has been deleted");
-            return Ok();
-        }
-
+    
+    [Authorize(Roles = AuthorizationConstants.Roles.ADMINISTRATORS)]
+    [HttpDelete("{orderId}")]
+    public async Task<IActionResult> DeleteOrder(OrderToDelete request)
+    {
+        await _mediator.Send(request);
+        _logger.LogInformation($"Order {request.OrderId} status has been deleted");
+        return Ok();
     }
+
+}
 }

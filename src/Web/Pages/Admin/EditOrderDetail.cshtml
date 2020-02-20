@@ -21,8 +21,9 @@
                    <form method="post">
 <div class="form-group">
                     <label asp-for=@Model.Status></label>
-                    @* TODO: *@
-                    @* <select asp-for="@Model.Status" asp-items="Model.Status"></select> *@
+                    <select class="form-control form-control-sm">
+                        <option>@Model.Status</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <input type="submit" value="Save" class="esh-catalog-button" />

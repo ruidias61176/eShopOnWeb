@@ -25,7 +25,7 @@ namespace Web.Pdf
                 }
                 url = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}{url}";
                 var uri = new Uri(url);
-                var filename = "filename.pdf"; // TODO: Infer from url
+                var filename = "filename.pdf";
                 // Create a PDF from a web page  
                 var Renderer = new HtmlToPdf();
                 var PDF = await Renderer.RenderUrlAsPdfAsync(uri);

@@ -14,6 +14,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.Web.Pages.Basket;
 using ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.Web;
+using Microsoft.eShopWeb.ApplicationCore.Services;
 
 namespace Microsoft.eShopWeb.Controllers
 {
@@ -24,13 +25,13 @@ namespace Microsoft.eShopWeb.Controllers
         private readonly IUriComposer _uriComposer;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAppLogger<BasketController> _logger;
-        private readonly IOrderService _orderService;
+        private readonly OrderService _orderService;
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IConfiguration _configuration;
 
         public BasketController(IBasketService basketService,
             IBasketViewModelService basketViewModelService,
-            IOrderService orderService,
+            OrderService orderService,
             IUriComposer uriComposer,
             SignInManager<ApplicationUser> signInManager,
             IAppLogger<BasketController> logger,
@@ -76,22 +77,6 @@ namespace Microsoft.eShopWeb.Controllers
             await _basketService.AddItemToBasket(basketViewModel.Id, productDetails.Id, productDetails.Price, 1);
 
             return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Checkout(Dictionary<string, int> items)
-        {
-            var basketViewModel = await GetBasketViewModelAsync();
-            await _basketService.SetQuantities(basketViewModel.Id, items);
-            //TODO:
-           // var addressToSend = "";
-           // var orderStatus = new OrderStatus();
-           // var orderID = await _orderService.CreateOrderAsync(basketViewModel.Id, addressToSend, orderStatus);
-
-            await _basketService.DeleteBasketAsync(basketViewModel.Id);
-
-            return View("Checkout");
         }
 
         private async Task<BasketViewModel> GetBasketViewModelAsync()

@@ -32,8 +32,8 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly ICurrencyService _currencyService;
         private readonly CatalogContext _catalogContext;
         private readonly IConfiguration _configuration;
-        private Currency default_price_unit= Currency.USD; // TODO: Get from Configuration
-        private Currency user_price_unit = Currency.EUR; // TODO: Get from IUserCurrencyService    
+        private Currency default_price_unit= Currency.USD;
+                private Currency user_price_unit = Currency.EUR;    
         public CatalogViewModelService(
             ILoggerFactory loggerFactory,
             IAsyncRepository<CatalogItem> itemRepository,

@@ -8,6 +8,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.WishlistAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Exceptions;
+using System;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Services
 {
@@ -39,10 +40,10 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             if (wishlist.Items.Any(x => x.CatalogItemId == catalogItemId)) {
                 throw new ItemAlreadyInWishlist("Item already in wishlist!");
             }
-            
-             // TODO: null?
+            if (wishlistId != wishlist.Id) {
+                throw new Exception("Wishlist doen't exist");
+            }
             var catalogItem = await _catalogItemRepository.GetByIdAsync(catalogItemId);
-            // TODO: null?
             wishlist.AddItemToWishlist(catalogItem.Id, catalogItem.Name, catalogItem.Price);
             _logger.LogInformation($"Wishlist {wishlistId} has a new item {catalogItem.Id} {catalogItem.Name}.");
             await _wishlistRepository.UpdateAsync(wishlist);
@@ -52,7 +53,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
         {
             var wishListItem = await _wishlistItemRepository.GetByIdAsync(wishListItemId);
             if (wishListItem == null) {
-                // TODO: Erro
+                throw new Exception("Wishlist item doen't exist");
             }
             var catalogItem = await _catalogItemRepository.GetByIdAsync(wishListItem.CatalogItemId);
             await _basketService.AddItemToBasket(basketId, wishListItem.CatalogItemId, catalogItem.Price, quantity);
